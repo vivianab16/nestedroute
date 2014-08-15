@@ -1,0 +1,28 @@
+== README
+0- Se debe de instalar los programas así:
+$ rails g simple_form:install --bootstrap
+$ rails g bootstrap:install                                
+Nota: Esto solo se hace una vez!
+gem 'less-rails'
+
+1.1- ejecutamos el scaffold de groups con los siguientes campos name y description así:
+$ rails g scaffold group name:string description:string --skip-stylesheets
+                                                       
+1.2- debemos migrar el scaffold creado asi: 
+$ rake db:migrate
+                                                    
+1.3- se instala el tema de bootstrap
+$ rails g bootstrap:themed groups -f
+
+1.4 verificamos el correcto funcionamiento y guardamos los cambios para ser confirmados
+
+1.4.1 
+$ git config user.name ""
+$ git config use
+r.email ""
+$ git add --all
+$ git status 
+$ git commit -m "Se creo el scaffold de groups"
+$ git log
+$ git push origin master
+$ git push set-url origin https:/github.com/nombre_usuario/nombre_repo 
