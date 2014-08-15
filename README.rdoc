@@ -26,3 +26,13 @@ $ git commit -m "Se creo el scaffold de groups"
 $ git log
 $ git push origin master
 $ git push set-url origin https:/github.com/nombre_usuario/nombre_repo 
+
+2. generamos otro scaffold:
+$ rails g scaffold member name:string studies:string dependency:string group:references --skip-stylesheets
+
+2.1- debemos migrar el scaffold creado asi: 
+$ rake db:migrate
+
+2.2 se debe hacer por cada scaffold correspondiente el punto 1.3 
+
+2.3 realizar pasos del punto 1.4.1 para el commit
