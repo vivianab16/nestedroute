@@ -5,6 +5,7 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th></th>
       <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:description) %></th>
@@ -15,6 +16,7 @@
   <tbody>
     <% @groups.each do |group| %>
       <tr>
+        <td><%= link_to 'Members(' + group.members.count.to_s + ')' , group_members_path(group) %></td>
         <td><%= link_to group.id, group_path(group) %></td>
         <td><%= group.name %></td>
         <td><%= group.description %></td>

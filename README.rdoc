@@ -58,3 +58,14 @@ class Members < ActiveRecord::Base
 belongs_to :group
 end
 #decimos que member son de un grupo
+
+4 validamos que las rutas se generaron como deseamos
+
+4.1 extraemos las rutas de nuestra app ejecutando el siguiente comando: $ rake routes > rutas1.txt
+
+4.2 adicionamos en el index de groups una nueva columna con un enlace de members para cada uno de los group con el fin de poder ingresar los miembros de un grupo, adicional a su nombre le concatenamos el número de members que posee app/views/groups/index.html.erb
+
+<% @groups.each do |group| %>
+     <tr>
+       <td><%= link_to 'Members(' + @group.members.count.to_s + ')' , group_members_path(group) %></td>
+
