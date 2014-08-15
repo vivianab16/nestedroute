@@ -69,3 +69,65 @@ end
      <tr>
        <td><%= link_to 'Members(' + @group.members.count.to_s + ')' , group_members_path(group) %></td>
 
+
+5. Modificamos los métodos del controller de Members  recuperando el id del grupo al que pertenece el miembro , como sabemos que todas las acciones de members requieren recuperar un grupo se elimina la parte del filtro only, ya que carece de sentido. y posteriormente arreglamos todas las rutas a las que redireccionan las acciones.
+5.1 aquí aparecen los métodos que se modifican en members_controllers.rb
+def set_member
+      #recupera el id del grupo al que pertenece
+      @group = Group.find(params[:group_id])
+      @member = Member.find(params[:id]) if params[:id]
+end
+
+def index
+   #filtra que solo recupere los miembros que pertenecen a ese grupo para luego mostrarlos
+   @members = @group.members.to_a
+end
+
+def create
+    @member = Member.new(member_params)
+    #esta línea permite guardar la clave foránea de lo contrario no deja guardar el registro en la db
+    @member.group_id = @group.id
+    respond_to do |format|
+      if @member.save
+        format.html { redirect_to group_members_path(@group,@member), notice: 'Member was successfully created.' }
+        format.json { render :show, status: :created, location: @member }
+      else
+        format.html { render :new }
+        format.json { render json: @member.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+#en update solo se actualiza la ruta para donde se redirecciona despues de actualizar el registro
+
+en app/views/members/index.html.erb se modifican todos los enlaces de members por su ruta anidada(acciones show, edit, destroy  y new) y adicionamos al final el siguiente enlace para poder devolvernos a groups
+ | 
+<%= link_to t('.back', :default => t("helpers.links.back")),
+            groups_path,
+            :class => 'btn btn-inverse' %>
+
+
+5.2 se Modifica el partial de members app/views/members/_form.html.erb así pasandole el objeto group y member en un arreglo y modificando la ruta a la que redirecciona en caso de cancelar
+<%= simple_form_for [@group,@member], :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :name %>
+  <%= f.input :studies %>
+  <%= f.input :dependency %>
+  <%= f.input :group_id %>
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                group_members_path(@group), :class => 'btn' %>
+  </div>
+<% end %>
+
+ 5.3 Se modifican todos los enlaces de las vistas faltantes como edit y show por los de la ruta anidada de members, se verifica su correcto funcionamiento y se confirman los cambios
+
+si desean ver los members a que grupo pertenecen en el app/views/members/index.html.er cambien la linea que tienen por esta:
+%=t '.title', :default => model_class.model_name.human.pluralize.titleize + ' de ' + @group.name %>
+
+En este momento deberás tener ya un proyecto con rutas anidadas.
+
+Espero les sea de gran ayuda!. 
+
+
+
